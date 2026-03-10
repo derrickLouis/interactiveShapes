@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Vision Art</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ─── Start screen ─────────────────────────────────────────────────── -->
+    <div id="start-screen">
+        <div id="start-content">
+            <div id="start-title">PARTICLE<br>CANVAS</div>
+            <div id="start-subtitle">Shape particles with your hands using your webcam</div>
+            <div id="start-hints">
+                <span>Open hand &rarr; rotate</span>
+                <span>Pinch &rarr; scale</span>
+                <span>Fist &rarr; release</span>
+            </div>
+            <button id="begin-btn">Begin</button>
+            <div id="start-note">Camera access required for hand tracking</div>
+        </div>
+    </div>
+
+    <!-- ─── Main experience ───────────────────────────────────────────────── -->
+    <div id="canvas-container">
+
+        <!-- Three.js canvas will be injected here by main.js -->
+
+        <!-- State display -->
+        <div id="state-display">Idle</div>
+
+        <!-- Shape selector -->
+        <div id="shape-selector">
+            <div class="shape-option active" data-shape="sphere" title="Sphere">
+                <svg class="shape-icon" viewBox="0 0 30 30">
+                    <circle cx="15" cy="15" r="12"/>
+                </svg>
+            </div>
+            <div class="shape-option" data-shape="cube" title="Cube">
+                <svg class="shape-icon" viewBox="0 0 30 30">
+                    <rect x="7" y="7" width="16" height="16"/>
+                </svg>
+            </div>
+            <div class="shape-option" data-shape="torus" title="Torus">
+                <svg class="shape-icon" viewBox="0 0 30 30">
+                    <circle cx="15" cy="15" r="12"/>
+                    <circle cx="15" cy="15" r="6"/>
+                </svg>
+            </div>
+            <div class="shape-option" data-shape="pyramid" title="Pyramid">
+                <svg class="shape-icon" viewBox="0 0 30 30">
+                    <path d="M 15 5 L 25 23 L 5 23 Z"/>
+                </svg>
+            </div>
+            <div id="upload-option" title="Upload Image">
+                <svg class="shape-icon" viewBox="0 0 30 30" style="width: 24px; height: 24px;">
+                    <path d="M 15 8 L 15 20 M 10 13 L 15 8 L 20 13 M 8 22 L 22 22"/>
+                </svg>
+            </div>
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Hand tracking status -->
+        <div id="hand-status">
+            <div class="status-item" id="left-hand-status">
+                <div class="status-dot"></div>
+                <span>Left Hand</span>
+            </div>
+            <div class="status-item" id="right-hand-status">
+                <div class="status-dot"></div>
+                <span>Right Hand</span>
+            </div>
+            <div class="status-item" id="gesture-status">
+                <div class="status-dot"></div>
+                <span>Gesture Detected</span>
+            </div>
+        </div>
+
+        <!-- Instructions — above camera preview -->
+        <div id="instructions">
+            <div class="instruction-line">Open hand &rarr; rotate shape</div>
+            <div class="instruction-line">Pinch &rarr; scale from anchor</div>
+            <div class="instruction-line">Fist / no hand &rarr; melt to liquid</div>
+            <div class="instruction-line">Hand reappears &rarr; auto-reform</div>
+            <div class="instruction-line">Space / &larr;&rarr;&uarr;&darr; &rarr; keyboard control</div>
+        </div>
+
+        <!-- Camera preview — bottom right -->
+        <div id="camera-preview">
+            <video id="camera-video" autoplay playsinline muted></video>
+            <canvas id="landmark-canvas"></canvas>
+            <div id="camera-status">Camera inactive</div>
+        </div>
+
+        <!-- Gesture feedback overlay -->
+        <div id="gesture-feedback">&#9680;</div>
+
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
