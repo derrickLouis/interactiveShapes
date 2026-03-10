@@ -1,0 +1,346 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ─── Start screen ─── */
+#start-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease;
+}
+
+#start-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#start-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+#start-title {
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 200;
+    letter-spacing: 0.25em;
+    line-height: 1.15;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+}
+
+#start-subtitle {
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    color: rgba(255, 255, 255, 0.5);
+    animation: fadeUp 1s ease 0.6s forwards;
+}
+
+#start-hints {
+    display: flex;
+    gap: 32px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+}
+
+#begin-btn {
+    margin-top: 12px;
+    padding: 14px 52px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+}
+
+#begin-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+#begin-btn:active {
+    transform: translateY(0);
+}
+
+#start-note {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    animation: fadeUp 1s ease 1.4s forwards;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ─── Main canvas container ─── */
+#canvas-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Subtle scanline overlay */
+#canvas-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.01) 0px,
+        rgba(255, 255, 255, 0.01) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Three.js canvas (injected by renderer) */
+#canvas-container canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+/* ─── State display — top left ─── */
+#state-display {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+/* ─── Shape selector — top right ─── */
+#shape-selector {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.shape-option,
+#upload-option {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#upload-option {
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.shape-option:hover,
+#upload-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.shape-option.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.shape-icon {
+    width: 30px;
+    height: 30px;
+    stroke: rgba(255, 255, 255, 0.8);
+    fill: none;
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+/* ─── Hand tracking status — bottom left ─── */
+#hand-status {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    z-index: 10;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.status-item.active {
+    opacity: 1;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-item.active .status-dot {
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+/* ─── Camera preview — bottom right ─── */
+#camera-preview {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 192px;
+    height: 144px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+#camera-preview.visible {
+    opacity: 0.55;
+}
+
+#camera-preview:hover {
+    opacity: 0.85;
+}
+
+#camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Mirror for natural selfie feel */
+    transform: scaleX(-1);
+}
+
+#landmark-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Canvas draws in raw (unmirrored) space but we flip it to match video */
+    transform: scaleX(-1);
+}
+
+#camera-status {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+/* ─── Instructions — above camera preview ─── */
+#instructions {
+    position: absolute;
+    bottom: 200px;
+    right: 40px;
+    max-width: 240px;
+    font-size: 12px;
+    line-height: 1.8;
+    opacity: 0.35;
+    text-align: right;
+    z-index: 10;
+    letter-spacing: 0.3px;
+}
+
+.instruction-line {
+    margin-bottom: 6px;
+}
+
+/* ─── Gesture feedback — center ─── */
+#gesture-feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 64px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    filter: blur(1px);
+    transition: opacity 0.3s ease;
+}
+
+#gesture-feedback.show {
+    animation: gestureFade 2s ease forwards;
+}
+
+@keyframes gestureFade {
+    0%   { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.3); }
+}
