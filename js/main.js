@@ -246,6 +246,7 @@ function processHand(hand) {
             pinchAnchorScale = particles.shapeScale;
             pinchAxis        = null;
             pinchAxisLocked  = false;
+            triggerGestureFeedback();
         }
 
         const dx   = hand.pos.x - pinchAnchorPos.x;
