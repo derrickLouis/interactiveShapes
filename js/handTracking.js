@@ -69,6 +69,8 @@ export class HandTracker {
         this._running = false;
         this._video?.srcObject?.getTracks().forEach(t => t.stop());
         if (this._video) this._video.srcObject = null;
+        this._landmarker?.close();
+        this._landmarker = null;
         document.getElementById('camera-preview')?.classList.remove('visible');
     }
 
