@@ -109,11 +109,26 @@ shapeOptions.forEach(option => {
         this.classList.add('active');
         selectShape(this.dataset.shape);
     });
+    // Keyboard activation (Enter / Space) — these are divs with role="button"
+    option.addEventListener('keydown', function (e) {
+        if (e.code === 'Enter' || e.code === 'Space') {
+            e.preventDefault();
+            this.click();
+        }
+    });
 });
 
 // ─── Image upload ─────────────────────────────────────────────────────────────
 
 uploadOption.addEventListener('click', () => fileInput.click());
+
+// Keyboard activation (Enter / Space) — uploadOption is a div with role="button"
+uploadOption.addEventListener('keydown', (e) => {
+    if (e.code === 'Enter' || e.code === 'Space') {
+        e.preventDefault();
+        fileInput.click();
+    }
+});
 
 fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];

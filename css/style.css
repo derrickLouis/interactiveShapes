@@ -189,6 +189,12 @@ body {
     transform: translateY(-2px);
 }
 
+.shape-option:focus-visible,
+#upload-option:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+}
+
 .shape-option.active {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.6);
