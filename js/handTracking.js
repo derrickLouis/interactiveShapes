@@ -58,8 +58,15 @@ export class HandTracker {
     async init(onHandsUpdate) {
         this.onHandsUpdate = onHandsUpdate;
 
-        await this._initLandmarker();
-        await this._initCamera();
+        try {
+            await this._initLandmarker();
+            await this._initCamera();
+        } catch (err) {
+            // Camera setup can fail after the landmarker is already created —
+            // release it (and any partial camera state) before rethrowing.
+            this.stop();
+            throw err;
+        }
 
         this._running = true;
         this._loop();
