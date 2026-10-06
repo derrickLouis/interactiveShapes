@@ -241,7 +241,7 @@ export class HandTracker {
         return curled >= 3;
     }
 
-    /** Pinch: thumb tip (lm[4]) close to index tip (lm[8]), other fingers not all curled */
+    /** Pinch: thumb tip (lm[4]) close to index tip (lm[8]), wrist-normalised */
     _isPinch(lm) {
         const wrist  = lm[0];
         const midMCP = lm[9];

@@ -141,7 +141,10 @@ fileInput.addEventListener('change', (e) => {
     img.onload = () => {
         URL.revokeObjectURL(url);
         const result = sampleImage(img);
-        if (!result) return;
+        if (!result) {
+            console.warn('Image upload ignored — no visible (non-transparent) pixels found:', file.name);
+            return;
+        }
 
         // Deactivate built-in shape buttons (no shape is "selected")
         shapeOptions.forEach(opt => opt.classList.remove('active'));
@@ -156,7 +159,10 @@ fileInput.addEventListener('change', (e) => {
         scheduleState(STATES.SHAPE, 2000);
     };
 
-    img.onerror = () => URL.revokeObjectURL(url);
+    img.onerror = () => {
+        console.warn('Image upload ignored — file could not be decoded as an image:', file.name);
+        URL.revokeObjectURL(url);
+    };
     img.src = url;
 });
 
