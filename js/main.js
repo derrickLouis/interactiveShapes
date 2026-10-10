@@ -143,6 +143,7 @@ fileInput.addEventListener('change', (e) => {
         const result = sampleImage(img);
         if (!result) {
             console.warn('Image upload ignored — no visible (non-transparent) pixels found:', file.name);
+            flashCameraStatus('Image has no visible pixels');
             return;
         }
 
@@ -161,6 +162,7 @@ fileInput.addEventListener('change', (e) => {
 
     img.onerror = () => {
         console.warn('Image upload ignored — file could not be decoded as an image:', file.name);
+        flashCameraStatus('Could not read image file');
         URL.revokeObjectURL(url);
     };
     img.src = url;
@@ -438,4 +440,10 @@ function triggerGestureFeedback() {
 
 function setCameraStatus(msg) {
     if (cameraStatus) cameraStatus.textContent = msg;
+}
+
+// Briefly show a message in the camera status area, then clear it.
+function flashCameraStatus(msg, durationMs = 2500) {
+    setCameraStatus(msg);
+    setTimeout(() => setCameraStatus(''), durationMs);
 }
