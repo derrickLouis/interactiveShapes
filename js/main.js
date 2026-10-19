@@ -135,6 +135,14 @@ fileInput.addEventListener('change', (e) => {
     if (!file) return;
     fileInput.value = '';
 
+    // The accept="image/*" hint on the input isn't enforced by every OS file
+    // picker (e.g. "All Files" dialogs), so guard against non-image files here.
+    if (!file.type.startsWith('image/')) {
+        console.warn('Image upload ignored — selected file is not an image:', file.name);
+        flashCameraStatus('Please choose an image file');
+        return;
+    }
+
     const url = URL.createObjectURL(file);
     const img  = new Image();
 
