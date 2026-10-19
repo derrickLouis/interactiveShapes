@@ -28,6 +28,10 @@ export function getShapePositions(shape) {
  * World-space Y is flipped (image Y increases down, world Y increases up).
  */
 export function sampleImage(img) {
+    // Guard against images with no intrinsic size (e.g. an SVG upload with no
+    // width/height or viewBox) — a 0×0 canvas would throw IndexSizeError below.
+    if (!img.naturalWidth || !img.naturalHeight) return null;
+
     // Draw into an offscreen canvas to read pixel data
     const canvas = document.createElement('canvas');
     const MAX_DIM = 256; // cap resolution — enough detail, keeps candidate list small
