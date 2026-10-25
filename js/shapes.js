@@ -12,6 +12,7 @@ export function getShapePositions(shape) {
         case 'cube':    return sampleCube(PARTICLE_COUNT, 2.4);
         case 'torus':   return sampleTorus(PARTICLE_COUNT, 1.2, 0.45);
         case 'pyramid': return samplePyramid(PARTICLE_COUNT, 1.5);
+        case 'octahedron': return sampleOctahedron(PARTICLE_COUNT, 1.6);
         default:        return sampleSphere(PARTICLE_COUNT, 1.5);
     }
 }
@@ -127,6 +128,42 @@ function sampleTorus(count, R, r) {
         out[i * 3]     = (R + r * Math.cos(phi)) * Math.cos(theta);
         out[i * 3 + 1] = (R + r * Math.cos(phi)) * Math.sin(theta);
         out[i * 3 + 2] = r * Math.sin(phi);
+    }
+    return out;
+}
+
+// ─── Octahedron ───────────────────────────────────────────────────────────────
+
+function sampleOctahedron(count, size) {
+    // Six vertices along the axes; eight triangular faces connect each
+    // (+/-X, +/-Y, +/-Z) combination of signs.
+    const verts = [
+        [ size, 0, 0], [-size, 0, 0],
+        [0,  size, 0], [0, -size, 0],
+        [0, 0,  size], [0, 0, -size],
+    ];
+    const faces = [];
+    for (const sx of [1, -1]) {
+        for (const sy of [1, -1]) {
+            for (const sz of [1, -1]) {
+                faces.push([
+                    verts[sx > 0 ? 0 : 1],
+                    verts[sy > 0 ? 2 : 3],
+                    verts[sz > 0 ? 4 : 5],
+                ]);
+            }
+        }
+    }
+
+    const out = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+        const tri = faces[Math.floor(Math.random() * faces.length)];
+        const s = Math.random();
+        const t = Math.random() * (1 - s);
+        const w = 1 - s - t;
+        out[i * 3]     = tri[0][0] * s + tri[1][0] * t + tri[2][0] * w;
+        out[i * 3 + 1] = tri[0][1] * s + tri[1][1] * t + tri[2][1] * w;
+        out[i * 3 + 2] = tri[0][2] * s + tri[1][2] * t + tri[2][2] * w;
     }
     return out;
 }

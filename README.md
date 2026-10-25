@@ -26,7 +26,7 @@ If a camera isn't available or permission is denied, the experience automaticall
 
 ## Shapes
 
-Sphere, cube, torus, and pyramid are generated procedurally (`js/shapes.js`). You can also upload any image — its visible pixels are sampled into a colored particle field.
+Sphere, cube, torus, pyramid, and octahedron are generated procedurally (`js/shapes.js`). You can also upload any image — its visible pixels are sampled into a colored particle field.
 
 ## Project structure
 
