@@ -130,6 +130,8 @@ uploadOption.addEventListener('keydown', (e) => {
     }
 });
 
+const MAX_UPLOAD_BYTES = 20 * 1024 * 1024; // 20MB — plenty for a photo, small enough to decode instantly
+
 fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -140,6 +142,15 @@ fileInput.addEventListener('change', (e) => {
     if (!file.type.startsWith('image/')) {
         console.warn('Image upload ignored — selected file is not an image:', file.name);
         flashCameraStatus('Please choose an image file');
+        return;
+    }
+
+    // Guard against very large files (e.g. unresized phone photos or scans) —
+    // decoding a huge image can momentarily freeze the tab before the pixel
+    // sampler even gets a chance to downscale it.
+    if (file.size > MAX_UPLOAD_BYTES) {
+        console.warn('Image upload ignored — file too large:', file.name, file.size);
+        flashCameraStatus('Image is too large (max 20MB)');
         return;
     }
 
