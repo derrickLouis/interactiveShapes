@@ -29,7 +29,7 @@
         <!-- Three.js canvas will be injected here by main.js -->
 
         <!-- State display -->
-        <div id="state-display">Idle</div>
+        <div id="state-display" aria-live="polite">Idle</div>
 
         <!-- Shape selector -->
         <div id="shape-selector">
@@ -96,7 +96,7 @@
         <div id="camera-preview">
             <video id="camera-video" autoplay playsinline muted></video>
             <canvas id="landmark-canvas"></canvas>
-            <div id="camera-status">Camera inactive</div>
+            <div id="camera-status" aria-live="polite">Camera inactive</div>
         </div>
 
         <!-- Gesture feedback overlay -->
