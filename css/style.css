@@ -350,3 +350,26 @@ body {
     0%   { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
     100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.3); }
 }
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+    #start-title,
+    #start-subtitle,
+    #start-hints,
+    #begin-btn,
+    #start-note {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .status-item.active .status-dot {
+        animation: none;
+    }
+
+    #gesture-feedback.show {
+        animation: none;
+        opacity: 0.3;
+        transform: translate(-50%, -50%);
+    }
+}
