@@ -13,6 +13,7 @@ export function getShapePositions(shape) {
         case 'torus':   return sampleTorus(PARTICLE_COUNT, 1.2, 0.45);
         case 'pyramid': return samplePyramid(PARTICLE_COUNT, 1.5);
         case 'octahedron': return sampleOctahedron(PARTICLE_COUNT, 1.6);
+        case 'cylinder': return sampleCylinder(PARTICLE_COUNT, 1.1, 2.4);
         default:        return sampleSphere(PARTICLE_COUNT, 1.5);
     }
 }
@@ -164,6 +165,38 @@ function sampleOctahedron(count, size) {
         out[i * 3]     = tri[0][0] * s + tri[1][0] * t + tri[2][0] * w;
         out[i * 3 + 1] = tri[0][1] * s + tri[1][1] * t + tri[2][1] * w;
         out[i * 3 + 2] = tri[0][2] * s + tri[1][2] * t + tri[2][2] * w;
+    }
+    return out;
+}
+
+// ─── Cylinder (surface only) ──────────────────────────────────────────────────
+
+function sampleCylinder(count, radius, height) {
+    const out = new Float32Array(count * 3);
+
+    // Weight cap vs. lateral-surface sampling by actual surface area so
+    // particle density looks uniform across the whole shape.
+    const capArea  = Math.PI * radius * radius;
+    const sideArea = 2 * Math.PI * radius * height;
+    const capProb  = (2 * capArea) / (2 * capArea + sideArea);
+
+    for (let i = 0; i < count; i++) {
+        const i3    = i * 3;
+        const theta = Math.random() * Math.PI * 2;
+
+        if (Math.random() < capProb) {
+            // Top or bottom cap — sqrt(random) gives uniform disc coverage.
+            const r = Math.sqrt(Math.random()) * radius;
+            const y = Math.random() < 0.5 ? height / 2 : -height / 2;
+            out[i3]     = r * Math.cos(theta);
+            out[i3 + 1] = y;
+            out[i3 + 2] = r * Math.sin(theta);
+        } else {
+            // Lateral surface
+            out[i3]     = radius * Math.cos(theta);
+            out[i3 + 1] = (Math.random() - 0.5) * height;
+            out[i3 + 2] = radius * Math.sin(theta);
+        }
     }
     return out;
 }
