@@ -109,10 +109,13 @@ shapeOptions.forEach(option => {
         this.classList.add('active');
         selectShape(this.dataset.shape);
     });
-    // Keyboard activation (Enter / Space) — these are divs with role="button"
+    // Keyboard activation (Enter / Space) — these are divs with role="button".
+    // stopPropagation keeps Space from also bubbling to the document-level
+    // handler and firing the global liquid/shape toggle shortcut.
     option.addEventListener('keydown', function (e) {
         if (e.code === 'Enter' || e.code === 'Space') {
             e.preventDefault();
+            e.stopPropagation();
             this.click();
         }
     });
@@ -122,10 +125,13 @@ shapeOptions.forEach(option => {
 
 uploadOption.addEventListener('click', () => fileInput.click());
 
-// Keyboard activation (Enter / Space) — uploadOption is a div with role="button"
+// Keyboard activation (Enter / Space) — uploadOption is a div with role="button".
+// stopPropagation keeps Space from also bubbling to the document-level handler
+// and firing the global liquid/shape toggle shortcut while the file picker opens.
 uploadOption.addEventListener('keydown', (e) => {
     if (e.code === 'Enter' || e.code === 'Space') {
         e.preventDefault();
+        e.stopPropagation();
         fileInput.click();
     }
 });
